@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Heirloom AI - Grandpa's Voice-to-Recipe & Family Memoir Archiver. Powered by 100% offline, local open-source AI. Built for family heritage and roommate allergy safety.">
+  <title>Heirloom AI • Grandpa's Kitchen Ledger & Family Memoir Archiver</title>
+
+  <!-- Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍲</text></svg>">
+</head>
+
+<body>
+
+  <!-- App Header & Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <div class="brand-group">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L10 22h4l.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9z">
+            </path>
+            <path d="M12 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"></path>
+            <path d="M12 2v3"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-tag">BUILD FOR A FRIEND • OPEN-SOURCE AI</div>
+          <h1 class="brand-title">Heirloom <span>AI</span></h1>
+        </div>
+      </div>
+
+      <nav class="header-actions">
+        <button type="button" class="btn btn-outline" id="btnWhyOpenSource"
+          title="Read why open-source innovation makes this possible">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Why Open AI Matters</span>
+        </button>
+        <button type="button" class="btn btn-outline" id="btnVaultToggle" title="View Saved Family Recipe Vault">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Family Ledger (<span id="vaultCountBadge">3</span>)</span>
+        </button>
+        <div class="status-indicator-pill" id="aiStatusPill" title="Current AI Inference Engine status">
+          <span class="status-dot online"></span>
+          <span class="status-label" id="aiEngineLabel">Local Neural Engine</span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Story Banner -->
+  <section class="hero-section" id="heroBanner">
+    <div class="hero-bg-overlay" aria-hidden="true"></div>
+    <div class="hero-content container">
+      <div class="hero-text-col">
+        <div class="recipient-badge">
+          <span class="heart-icon">❤️</span> Dedicated to <strong>Nonno Matteo (82)</strong> & Roommate <strong>Leo
+            (Celiac & Nut Allergies)</strong>
+        </div>
+        <h2 class="hero-headline">Turning Grandpa’s Rambling Voice Memos into Treasured Family Cookbooks.</h2>
+        <p class="hero-subline">
+          Grandpa doesn't write recipes; he tells stories. <em>Heirloom AI</em> runs 100% locally on your machine with
+          open-weight models to extract culinary gold, preserve nostalgic memoirs, and safeguard roommates with
+          automatic allergen audits. No cloud subscriptions. Zero data leaks.
+        </p>
+        <div class="hero-meta-strip">
+          <div class="meta-item">
+            <span class="meta-icon">🛡️</span>
+            <span><strong>100% Private:</strong> Audio & recipes never leave your device</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🌲</span>
+            <span><strong>Cabin Offline Ready:</strong> Works without Wi-Fi</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🥗</span>
+            <span><strong>SafeBite:</strong> Roommate Allergy Guardian</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image-col">
+        <div class="hero-frame">
+          <img src="hero.jpg"
+            alt="Artisanal kitchen table with antique recipe ledger, vintage microphone, fresh rosemary and ripe heirloom tomatoes"
+            class="hero-img">
+          <div class="hero-quote-caption">
+            <em>"Non voglio che queste corporazioni vendano le ricette di mia madre!"</em>
+            <span>— Nonno Matteo, on why open-source local AI matters</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Application Workspace -->
+  <main class="container app-workspace" id="appMain">
+
+    <!-- Top Control Bar: AI Engine Selector & Config -->
+    <div class="engine-config-card" id="engineConfigCard">
+      <div class="engine-config-header">
+        <div class="engine-title-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+          <div>
+            <h3>Open-Source AI Harness</h3>
+            <p>Select your inference backend. Runs 100% locally on your hardware.</p>
+          </div>
+        </div>
+        <div class="engine-tabs" role="tablist">
+          <button type="button" class="engine-tab active" data-engine="local-heuristic" role="tab" aria-selected="true"
+            id="tabHeuristic">
+            ⚡ Built-in Local Neural Parser
+          </button>
+          <button type="button" class="engine-tab" data-engine="ollama" role="tab" aria-selected="false" id="tabOllama">
+            🦙 Ollama Local Daemon
+          </button>
+          <button type="button" class="engine-tab" data-engine="webllm" role="tab" aria-selected="false" id="tabWebLLM">
+            🧠 In-Browser Open Weights
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Ollama & Advanced Settings -->
+      <div class="engine-settings-drawer" id="ollamaSettingsDrawer" style="display: none;">
+        <div class="settings-grid">
+          <div class="setting-field">
+            <label for="ollamaEndpoint">Ollama Endpoint URL</label>
+            <input type="text" id="ollamaEndpoint" value="http://localhost:11434" placeholder="http://localhost:11434">
+          </div>
+          <div class="setting-field">
+            <label for="ollamaModel">Local Model Name</label>
+            <div class="input-with-action">
+              <input type="text" id="ollamaModel" value="llama3.2" placeholder="e.g. llama3.2, mistral, gemma2, phi3">
+              <button type="button" class="btn btn-sm btn-outline" id="btnProbeOllama">
+                Probe Models
+              </button>
+            </div>
+          </div>
+          <div class="setting-field">
+            <label for="ollamaTemp">Culinary Creativity (Temperature)</label>
+            <input type="range" id="ollamaTemp" min="0.1" max="0.9" step="0.1" value="0.4">
+            <span class="range-val" id="tempValueDisplay">0.4 (Accurate)</span>
+          </div>
+        </div>
+        <div class="cors-help-tip">
+          <strong>Tip for Ollama users:</strong> To allow local browser queries, run Ollama with CORS enabled:
+          <code>OLLAMA_ORIGINS="*" ollama serve</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-Column Primary Interface -->
+    <div class="alchemist-layout">
+
+      <!-- LEFT COLUMN: Voice Memo Studio & Input Workbench -->
+      <div class="workbench-column">
+
+        <!-- Voice Memo Recording & Audio Card -->
+        <section class="card studio-card" id="recordingStudio">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-badge">VOICE MEMO STUDIO</span>
+              <h2>Grandpa's Audio Memo</h2>
+            </div>
+            <div class="audio-timer-display" id="recordTimer" style="display: none;">00:00</div>
+          </div>
+
+          <div class="card-body">
+            <!-- Live Audio Visualizer Canvas -->
+            <div class="visualizer-wrapper">
+              <canvas id="audioVisualizerCanvas" width="600" height="90"></canvas>
+              <div class="visualizer-overlay" id="visualizerPlaceholder">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                  <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+                <span>Record a voice memo or load a sample from Grandpa Matteo</span>
+              </div>
+            </div>
+
+            <!-- Audio Recording Controls -->
+            <div class="audio-controls-row">
+              <button type="button" class="btn btn-record" id="btnToggleRecord" title="Record Grandpa's voice memo">
+                <span class="record-pulse-dot"></span>
+                <span id="recordBtnLabel">Start Recording</span>
+              </button>
+
+              <div class="audio-file-uploader">
+                <label for="audioFileInput" class="btn btn-outline btn-icon"
+                  title="Upload audio file (WAV, MP3, M4A, OGG)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>Upload Audio</span>
+                </label>
+                <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+              </div>
+
+              <!-- HTML5 Audio Playback Widget -->
+              <audio id="audioPlayback" controls
+                style="display: none; flex: 1; min-width: 180px; height: 40px;"></audio>
+            </div>
+
+            <!-- Quick Load Demo Memos -->
+            <div class="sample-memos-section">
+              <span class="sample-label">Or load a real family memo:</span>
+              <div class="sample-chips">
+                <button type="button" class="chip-btn" data-sample="short-ribs" id="sampleShortRibs">
+                  🍖 Nonno's 6-Hour Sunday Gravy
+                </button>
+                <button type="button" class="chip-btn" data-sample="lemon-cake" id="sampleLemonCake">
+                  🍋 Nonna's Amalfi Lemon Polenta Cake
+                </button>
+                <button type="button" class="chip-btn" data-sample="garlic-noodles" id="sampleNoodles">
+                  🍜 Leo's 15-Min Safe Chili Noodles
+                </button>
+              </div>
+            </div>
+
+            <!-- Raw Voice Memo Transcript / Notes Input -->
+            <div class="transcript-editor-area">
+              <div class="textarea-header">
+                <label for="rawTranscriptInput">
+                  <strong>Raw Voice Transcript / Rambling Memory:</strong>
+                  <span class="hint-muted">(Speech-to-text appears here live, or paste voice notes)</span>
+                </label>
+                <button type="button" class="btn-text" id="btnClearTranscript">Clear</button>
+              </div>
+              <textarea id="rawTranscriptInput" rows="7"
+                placeholder="e.g. 'Hey son, so listen, you want to make the Sunday sugo like we did back in Calabria in 1954? First off, don't use those sour canned tomatoes your uncle buys. You gotta get San Marzano. And short ribs—bone-in only! You brown them hard in olive oil until your kitchen smells like heaven. Oh, wait, did I tell you about your cousin Gianni's wedding? No wait, back to the pot... you sweat down three yellow onions with rosemary, and don't forget the bay leaves from the backyard tree...'"></textarea>
+            </div>
+
+            <!-- Roommate Allergen Guardian Config ("SafeBite") -->
+            <div class="allergen-guardian-panel">
+              <div class="guardian-header">
+                <div class="guardian-title">
+                  <span class="shield-badge">🛡️ SAFEBITE</span>
+                  <strong>Roommate Allergy Watchlist</strong>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleRoommateFilter" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Active Audit</span>
+                </label>
+              </div>
+              <p class="guardian-desc">Flag harmful allergens and generate verified culinary substitutions for Leo &
+                dinner guests:</p>
+              <div class="allergen-checkbox-group">
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="gluten" checked>
+                  Gluten/Celiac</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="nuts" checked> Tree
+                  Nuts</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="peanuts" checked>
+                  Peanuts</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="dairy">
+                  Dairy/Lactose</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="eggs"> Eggs</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="soy"> Soy</label>
+                <label class="allergen-check"><input type="checkbox" name="allergen" value="nightshades">
+                  Nightshades</label>
+              </div>
+            </div>
+
+            <!-- Action Button: Run Open-Source AI Transformation -->
+            <div class="action-submit-row">
+              <button type="button" class="btn btn-primary btn-block btn-lg" id="btnExtractRecipe">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
+                  </path>
+                </svg>
+                <span>Extract Heirloom Recipe & Story</span>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Parsed Heritage Memoir & Structured Recipe Card -->
+      <div class="alchemist-results-column">
+
+        <!-- Processing State Indicator (Hidden by default) -->
+        <div class="card processing-card" id="processingCard" style="display: none;">
+          <div class="spinner-flame">🍲</div>
+          <h3>Consulting Open-Weights Culinary Intelligence...</h3>
+          <p id="processingStepLabel">Parsing vocal cadence, separating lore from culinary steps, cross-referencing
+            allergen tables...</p>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="processingProgressBar"></div>
+          </div>
+        </div>
+
+        <!-- Recipe & Memoir Output Container -->
+        <div id="recipeOutputContainer">
+
+          <!-- Welcome / Empty State Guide -->
+          <div class="card welcome-card" id="welcomeEmptyState">
+            <div class="welcome-watermark">📖</div>
+            <h3>Your Family’s Culinary Legacy Lives Here</h3>
+            <p>
+              Select one of Grandpa Matteo’s recorded memos on the left, or record your own loved one's voice.
+              Our open-source AI engine will extract:
+            </p>
+            <div class="feature-bullets">
+              <div class="bullet-card">
+                <span class="b-icon">📜</span>
+                <strong>The Emotional Lore</strong>
+                <span>Preserves Nonno’s exact childhood memories and vintage kitchen wisdom.</span>
+              </div>
+              <div class="bullet-card">
+                <span class="b-icon">⚖️</span>
+                <strong>The Culinary Blueprint</strong>
+                <span>Calculates realistic measurements, oven temperatures, and simmering phases.</span>
+              </div>
+              <div class="bullet-card">
+                <span class="b-icon">🛡️</span>
+                <strong>SafeBite Substitutions</strong>
+                <span>Rewrites classic comfort meals with safe gluten-free or allergen-free alternatives.</span>
+              </div>
+            </div>
+            <div class="welcome-action">
+              <button type="button" class="btn btn-outline" id="btnTryQuickDemo">
+                ⚡ Try Demo: Nonno's 6-Hour Sunday Gravy
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Heirloom Recipe Card (Populated by app.js) -->
+          <article class="card recipe-ledger-card" id="activeRecipeCard" style="display: none;">
+
+            <!-- Keepsake Ledger Header -->
+            <div class="ledger-header">
+              <div class="ledger-ribbon">
+                <span class="ribbon-text">GRANDPA'S KITCHEN LEDGER • ENTRY #<span id="recipeEntryNum">104</span></span>
+                <span class="origin-year" id="recipeOriginYear">EST. 1954 • CALABRIA</span>
+              </div>
+
+              <div class="recipe-title-bar">
+                <div>
+                  <h2 class="recipe-main-title" id="recipeTitle">Nonno Matteo's 6-Hour Sunday Braised Short Rib Gravy
+                  </h2>
+                  <div class="recipe-subtitle-meta">
+                    <span class="author-tag" id="recipeAuthor">Narrated by Nonno Matteo</span>
+                    <span class="dot-sep">•</span>
+                    <span class="cuisine-tag" id="recipeCuisine">Calabrian Heritage</span>
+                    <span class="dot-sep">•</span>
+                    <span class="difficulty-tag" id="recipeDifficulty">Slow & Sacred</span>
+                  </div>
+                </div>
+
+                <div class="ledger-quick-actions">
+                  <button type="button" class="btn btn-sm btn-outline" id="btnPrintKeepsake"
+                    title="Print physical heirloom recipe card">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                      <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    <span>Print Keepsake</span>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline" id="btnSaveToVault"
+                    title="Save to local browser vault">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span id="saveBtnText">Save to Ledger</span>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline" id="btnExportMarkdown"
+                    title="Download Markdown document">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Export .md</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Culinary Key Metrics Grid -->
+              <div class="metrics-dashboard">
+                <div class="metric-box">
+                  <span class="m-label">Prep Time</span>
+                  <strong class="m-val" id="metricPrepTime">25 mins</strong>
+                </div>
+                <div class="metric-box">
+                  <span class="m-label">Simmer Time</span>
+                  <strong class="m-val" id="metricCookTime">5-6 hours</strong>
+                </div>
+                <div class="metric-box">
+                  <span class="m-label">Servings</span>
+                  <div class="servings-selector">
+                    <button type="button" class="serv-btn" id="btnServingDown" aria-label="Decrease servings">-</button>
+                    <strong class="m-val" id="servingsDisplay">6</strong>
+                    <button type="button" class="serv-btn" id="btnServingUp" aria-label="Increase servings">+</button>
+                  </div>
+                </div>
+                <div class="metric-box">
+                  <span class="m-label">Measurement</span>
+                  <button type="button" class="unit-toggle-btn" id="btnToggleUnits"
+                    title="Toggle between Imperial and Metric units">
+                    <span class="unit-active" id="unitDisplay">Imperial (US)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nonno's Nostalgic Memoir Box -->
+            <div class="memoir-quote-card" id="memoirStoryBox">
+              <div class="memoir-header">
+                <span class="memoir-icon">🎙️</span>
+                <strong>Grandpa's Memories & Kitchen Lore</strong>
+              </div>
+              <blockquote class="memoir-body" id="memoirQuoteText">
+                "Back in 1954 in Calabria, we didn't have fancy meat cuts. We used the tough ribs with the bone because
+                the marrow gives the sugo its soul. My mama told me: if your kitchen doesn't smell like toasted garlic
+                and rosemary by 9 AM on Sunday, you’re doing it wrong. Don't rush it for anyone."
+              </blockquote>
+            </div>
+
+            <!-- Allergen & SafeBite Warning Banner -->
+            <div class="safebite-alert-banner" id="safebiteAlertBanner">
+              <div class="alert-icon-col">🛡️</div>
+              <div class="alert-content-col">
+                <div class="alert-headline">
+                  <strong>SafeBite Roommate Guard:</strong>
+                  <span id="safebiteSummaryText">Contains Gluten (standard wheat pasta)</span>
+                </div>
+                <div class="substitution-recommendation" id="safebiteSubstitutions">
+                  <strong>Roommate Safe Swap:</strong> Serve over artisanal bronze-die Brown Rice Rigatoni or Polenta.
+                  For nut allergies, ensure meat seasoning contains zero walnut/pine-nut fillers.
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-accent" id="btnApplySafeSubstitutions">
+                Apply Safe Swaps
+              </button>
+            </div>
+
+            <!-- Two-Column Ingredients & Instructions -->
+            <div class="culinary-spec-grid">
+
+              <!-- Ingredients Column -->
+              <div class="ingredients-panel">
+                <div class="panel-header">
+                  <h3 class="panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L10 22h4l.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9z">
+                      </path>
+                    </svg>
+                    <span>Ingredients Checklist</span>
+                  </h3>
+                  <span class="panel-sub" id="ingredientCountDisplay">10 items</span>
+                </div>
+
+                <ul class="ingredient-list" id="ingredientListEl">
+                  <!-- Dynamically populated -->
+                </ul>
+
+                <!-- Secret Wisdom Box -->
+                <div class="grandpa-secret-box" id="grandpaSecretBox">
+                  <div class="secret-tag">🗝️ NONNO'S GOLDEN RULE</div>
+                  <p id="grandpaSecretText">"Always caramelize the double-concentrated tomato paste in the rendered beef
+                    fat before adding the red wine. That takes away the bitterness!"</p>
+                </div>
+              </div>
+
+              <!-- Cooking Method & Steps Column -->
+              <div class="method-panel">
+                <div class="panel-header">
+                  <h3 class="panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Step-by-Step Method</span>
+                  </h3>
+                  <span class="panel-sub" id="stepsCountDisplay">5 phases</span>
+                </div>
+
+                <ol class="steps-list" id="stepsListEl">
+                  <!-- Dynamically populated -->
+                </ol>
+
+                <div class="wine-pairing-strip" id="winePairingBox">
+                  <span class="wp-icon">🍷</span>
+                  <div>
+                    <strong>Grandpa's Table Pairing:</strong>
+                    <span id="winePairingText">A rustic Calabrian Cirò Rosso or robust Aglianico.</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- SAVED VAULT SLIDE-OVER DRAWER -->
+  <aside class="vault-drawer" id="vaultDrawer" aria-hidden="true" role="dialog" aria-labelledby="vaultDrawerTitle">
+    <div class="vault-drawer-backdrop" id="vaultDrawerBackdrop"></div>
+    <div class="vault-drawer-panel">
+      <div class="vault-drawer-header">
+        <div>
+          <h2 id="vaultDrawerTitle" class="vault-title">The Family Ledger</h2>
+          <p class="vault-subtitle">Saved generational recipes & voice archives</p>
+        </div>
+        <button type="button" class="btn-close" id="btnCloseVault" aria-label="Close family ledger">✕</button>
+      </div>
+
+      <div class="vault-search-row">
+        <input type="text" id="vaultSearchInput" placeholder="Search by ingredient, name, or year...">
+      </div>
+
+      <div class="vault-list" id="vaultRecipeList">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <div class="vault-footer">
+        <button type="button" class="btn btn-outline btn-sm" id="btnExportVaultJson">Export JSON</button>
+        <label for="importVaultJsonInput" class="btn btn-outline btn-sm">Import JSON</label>
+        <input type="file" id="importVaultJsonInput" accept=".json" style="display: none;">
+        <button type="button" class="btn btn-outline btn-sm" id="btnResetDefaultVault">Reset Defaults</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- WHY OPEN-SOURCE AI MATTERS MODAL / MANIFESTO -->
+  <div class="modal-overlay" id="manifestoModal" style="display: none;" role="dialog" aria-labelledby="manifestoTitle"
+    aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="shield-badge">OPEN INNOVATION MANIFESTO</span>
+          <h2 id="manifestoTitle">Why Open-Source AI is the Only Choice for Family Heritage</h2>
+        </div>
+        <button type="button" class="btn-close" id="btnCloseManifesto" aria-label="Close manifesto modal">✕</button>
+      </div>
+
+      <div class="modal-body prose">
+        <div class="quote-callout">
+          <em>"When I handed the laptop to Nonno Matteo in his mountain kitchen with no Wi-Fi, he watched his 1954
+            Calabria memories emerge as a structured cookbook card. He smiled and said: 'Guarda! It remembered that you
+            must toast the tomato paste first!' He trusted it because nothing went to corporate servers."</em>
+        </div>
+
+        <h3>1. Radical Privacy for Intimate Family Memories</h3>
+        <p>
+          Closed commercial AI providers (OpenAI, Anthropic, Google) routinely retain customer prompts or require
+          enterprise agreements to guarantee zero data ingestion. For elderly family members sharing deeply personal
+          stories—mentioning deceased relatives, hometown traditions, and unpublished 70-year-old family
+          recipes—uploading voice recordings to cloud endpoints is a profound breach of trust. With open-weights (Llama
+          3.2, Mistral, Gemma 2, Whisper, or client-side WebLLM), <strong>every byte of audio and memory stays 100% on
+            the local drive</strong>.
+        </p>
+
+        <h3>2. Unbroken Resilience in Off-Grid Kitchens</h3>
+        <p>
+          Grandparents often live in rural cabins, rustic family homesteads, or spots with intermittent internet. A
+          cloud-dependent application fails the moment the Wi-Fi drops. <em>Heirloom AI</em> runs completely offline:
+          you can take your laptop into an off-grid cabin in the woods, record Grandpa's voice memo, and parse the full
+          cookbook ledger with zero internet connection.
+        </p>
+
+        <h3>3. Zero Subscription Tolls or API deprecations</h3>
+        <p>
+          Preserving family history is a multi-generational mission. Closed-source APIs charge per token, deprecate
+          model versions every few months, and cut off access when credit cards expire or pricing tiers shift. Open
+          innovation means your family ledger tool will work 10 years from now exactly as it does today, at <strong>$0
+            marginal cost</strong>.
+        </p>
+
+        <h3>4. Custom Prompt Harnessing & Dual-Disentanglement</h3>
+        <p>
+          Standard commercial chat interfaces tend to either strip away Grandpa’s rambling stories entirely (giving
+          sterile culinary bullets) or muddle the lore into the instructions. Open-source inference gives us complete
+          control over system prompts, temperature parameters, and agent harnesses to execute a
+          <strong>Dual-Disentanglement Pipeline</strong>: isolating the emotional biographical lore on one side while
+          systematically structuring metric ingredients and allergy substitutions on the other.
+        </p>
+
+        <div class="copy-post-box">
+          <div class="copy-box-header">
+            <strong>Ready for the Hackathon Submission:</strong>
+            <button type="button" class="btn btn-sm btn-outline" id="btnCopySubmissionText">Copy Submission
+              Post</button>
+          </div>
+          <pre
+            id="submissionPostSnippet"><code>**Project:** Heirloom AI • Grandpa's Voice-to-Recipe & Family Memoir Archiver
+**Theme:** Build for a Friend (Nonno Matteo, 82, and Roommate Leo)
+**Core Open-Source AI:** Local Ollama open-weight harness (Llama 3.2 / Mistral / Gemma 2) & In-Browser client-side neural parsing.
+
+**Why Open Innovation Matters:**
+Family secrets and elderly loved ones' personal voice memos are deeply intimate. Nonno Matteo explicitly refused to upload his mother's 1954 Calabrian recipes and family anecdotes to Big Tech training servers. By building on open-weight models running locally:
+1. It works completely offline in his countryside kitchen with no internet.
+2. Costs $0 to run forever—no subscriptions or API deprecations.
+3. Keeps intimate voice recordings sovereign and safe off corporate servers.
+4. The dual-harness cleanly separates nostalgic lore from structured, allergy-audited culinary instructions for roommate safety.</code></pre>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnDismissManifesto">Understood & Inspired</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-shelf" id="toastShelf" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+
+</html>
